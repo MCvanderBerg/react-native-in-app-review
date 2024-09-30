@@ -30,8 +30,14 @@ buildscript {
 }
 
 
-def safeExtGet(name) {
-  rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties[name]
+def safeExtGet(name, fallback) {
+  if (rootProject.ext.has(name)){
+    return rootProject.ext.get(name) 
+  } else if (project.properties[name]) {
+    return project.properties[name]
+  }  
+
+  return fallback  
 }
 
 android {
@@ -73,6 +79,6 @@ android {
 dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    implementation "com.google.android.play:review:${safeExtGet('playReviewVersion')}"
-    implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion')}"
+    implementation "com.google.android.play:review:${safeExtGet('playReviewVersion', '2.0.1')}"
+    implementation "com.google.android.gms:play-services-base:${safeExtGet('playServicesVersion', '17.5.0')}"
 }
